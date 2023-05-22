@@ -1,0 +1,58 @@
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Note } from 'src/app/model/note';
+import { NoteService } from 'src/app/services/note.service';
+
+@Component({
+  selector: 'app-create-note',
+  templateUrl: './create-note.component.html',
+  styleUrls: ['./create-note.component.css']
+})
+export class CreateNoteComponent implements OnInit {
+  note: Note = new Note();
+  noteByPatId: Note = new Note();
+  patId!: number;
+
+  constructor(
+    private noteService: NoteService,
+    private router: Router,
+    private route: ActivatedRoute) { }
+
+  ngOnInit(): void {
+    this.patId = this.route.snapshot.params['id'];
+  }
+
+  addNewNote() {
+    this.noteService.createNewNote(this.note).subscribe({
+      next: noteSaved => {
+        console.log(noteSaved);
+        this.goToNoteList();
+      },
+      error: error => {
+        console.error(error)
+      }
+    });
+  }
+
+  goToNoteList() {
+    this.router.navigate([`/note-list`]);
+  }
+  ngSubmit() {
+    console.log(this.note);
+    this.addNewNote();
+  }
+
+  addNewNotByPatId() {
+    this.noteService.createNewNoteByPatId(this.patId, this.noteByPatId).subscribe({
+      next: data => {
+        console.log(data);
+        this.router.navigate(['patient-details', this.patId]);
+      }, error: err => {
+        console.log(err);
+      }
+    }) 
+  }
+}
+
+
+

@@ -1,0 +1,31 @@
+<div class="col-md-6 offset-md-3">
+    <h3>Update Note</h3>
+    <form (ngSubmit)="ngSubmit()">
+        <div class="form-group">
+            <input hidden="hidden" type="number" class="form-control" id="patId" [(ngModel)]="note.patId" name="patId">
+        </div>
+
+        <div class="form-group">
+            <input hidden="hidden" type="text" class="form-control" id="patLastName" [(ngModel)]="note.patLastName" name="patLastName">
+        </div>
+
+        <div class="form-group">
+            <label>Comment</label>
+            <textarea class="form-control" id="comment" [(ngModel)]="note.comment" name="comment"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Consultation Date</label>
+            <input type="date" class="form-control" id="createdAt" [(ngModel)]="note.createdAt" name="createdAt">
+        </div>
+
+      <div *ngIf="errorMessage" class="alert alert-danger text-danger mt-2 fs-5">
+        {{ errorMessage }}
+      </div>
+      <div class="alert alert-danger text-danger mt-2 fs-5" *ngFor="let mgs of errorMessages">
+        <div>{{mgs}}</div>
+      </div>
+
+        <button type="submit" class="btn btn-success create-button">Update Note</button>
+    </form>
+</div>

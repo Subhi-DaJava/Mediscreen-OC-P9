@@ -1,0 +1,21 @@
+<div class="col-md-6 offset-md-3">
+  <h3>Add New Note</h3>
+  <form (ngSubmit)="ngSubmit()">
+
+    <div class="form-group">
+      <label>Add Your Comment</label>
+      <textarea class="form-control" id="comment" [(ngModel)]="comment" name="comment"
+                placeholder="Enter your note..." style="white-space: pre-wrap;"></textarea>
+    </div>
+
+    <div *ngIf="comment">{{comment}}</div>
+
+    <div *ngIf="errorMessage" class="alert alert-danger text-danger mt-2 fs-5">
+      {{ errorMessage }}
+    </div>
+
+    <button type="submit" class="btn btn-success create-button">Save Note</button>
+    <button type="submit" class="btn btn-danger cancel-button mx-1">
+      <a [routerLink]="['/patient-details', patid]" class="text-decoration-none text-white">Cancel</a></button>
+  </form>
+</div>

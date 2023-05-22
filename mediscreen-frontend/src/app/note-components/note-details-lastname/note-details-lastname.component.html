@@ -1,0 +1,32 @@
+<h2>Notes</h2>
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Patient ID</th>
+    <th>LastName</th>
+    <th>Doctor Notes</th>
+    <th>Date</th>
+    <th class="text-center">Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let note of notes">
+    <td>{{note.patId}}</td>
+    <td>{{note.patLastName}}</td>
+    <td style="white-space: pre-wrap">{{note.comment}}</td>
+    <td style="width: 120px;">{{note.createdAt }}</td>
+    <td>
+      <button (click)="updateNoteById(note.id)" class="btn btn-info" style="margin-left: 3px;">Update</button>
+    </td>
+    <td>
+      <button (click)="deleteNoteById(note.id)" class="btn btn-danger" style="margin-left: 3px;">Delete</button>
+    </td>
+
+  </tr>
+  </tbody>
+</table>
+
+
+<div *ngIf="errorMessage" class="alert alert-danger text-danger mt-2 fs-5">
+  {{ errorMessage }}
+</div>

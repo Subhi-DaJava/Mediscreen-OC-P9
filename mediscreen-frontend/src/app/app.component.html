@@ -1,0 +1,22 @@
+<nav class = "navbar navbar-expand-sm bg-primary navbar-dark">
+    <ul class = "navbar-nav">
+        <li class = "nav-item">
+            <a routerLink = "patients" routerLinkActive="active" class = "nav-link">Patient List</a>
+        </li>
+        <li class = "nav-item">
+            <a routerLink = "create-patient" routerLinkActive="active" class = "nav-link">Add Patient</a>
+        </li>
+        <li class = "nav-item">
+            <a routerLink = "note-list" routerLinkActive="active" class = "nav-link">Note List</a>
+        </li>
+    </ul>
+</nav>
+<h1 class="text-center mb-3">{{title}}</h1>
+<div class="container">
+    <router-outlet></router-outlet>
+</div>
+<footer class= "footer">
+    <div class="container">
+        <span>All Rights Reserved 2023 @Mediscreen</span>
+    </div>
+</footer>

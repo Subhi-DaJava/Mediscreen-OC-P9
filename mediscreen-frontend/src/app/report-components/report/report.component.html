@@ -1,0 +1,19 @@
+<div class="card mb-5 mt-5" *ngIf="report">
+  <div class="card-header text-center">
+    <h2>Risque Level</h2>
+  </div>
+  <div class="card-body fs-5">
+
+      <div><label>Patient ID: </label><b style="padding-left: 10px;">{{report.patId}}</b></div>
+      <div><label>Patient Full Name: </label><b style="padding-left: 10px;">{{report.patFullName}}</b></div>
+      <div><label>Diabetes Assessment: </label><b style="padding-left: 10px;">{{report.diabetesAssessment}}</b></div>
+    </div>
+</div>
+
+<div *ngIf="errorMessage" class="alert alert-danger text-danger mt-2 fs-5">
+  {{errorMessage}}
+  <p>Note not found in Database for generating the report!</p>
+</div>
+<div class="text text-center fs-2 m-2"><button class="btn btn-primary"><a [routerLink]="['/patient-details', patId]"
+                                                                          class="text-decoration-none text-white fs-4">Go Back To Patient Details</a></button></div>
+

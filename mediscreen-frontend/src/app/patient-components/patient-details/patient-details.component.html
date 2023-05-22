@@ -1,0 +1,64 @@
+<div class="card">
+  <div class="card-header">
+    <h2>Patient Informations</h2>
+  </div>
+  <div class="card-body fs-5">
+    <div>
+      <div>
+        <div><label>Patient ID:</label><b style="padding-left: 10px;">{{patient.id}}</b></div>
+        <div><label>First Name:</label><b style="padding-left: 10px;">{{patient.firstName}}</b></div>
+        <div><label>Last Name:</label>
+          <b style="padding-left: 10px;" (click)="generateReportByPatName(patient.lastName)"><button class="btn btn-success text-white fs-4">{{patient.lastName}}</button>
+          </b></div>
+        <div><label>Date Of Birth :</label><b style="padding-left: 10px;">{{patient.dateOfBirth}}</b></div>
+        <div><label>Gender:</label><b style="padding-left: 10px;">{{patient.sex}}</b></div>
+        <div><label>Phone Number:</label><b style="padding-left: 10px;">{{patient.phoneNumber}}</b></div>
+        <div><label>Home Address:</label><b style="padding-left: 10px;">{{patient.homeAddress}}</b></div>
+        <div class="mt-3 text text-center">
+          <button class="btn btn-info" [routerLink]="['/update-patient', patient.id]">Update</button>
+          <button class="btn btn-danger mx-2" (click)="deletePatientById(patient.id)">Delete</button>
+          <button class="btn btn-success mx-2" (click)="generateReportByPatId(patient.id)">Generate Report</button>
+          <button class="btn btn-primary mx-2"><a routerLink="/patients" class="text text-white text-decoration-none">Patient List</a></button>
+        </div>
+      </div>
+
+      <div *ngIf="notes">
+        <h2>Practitioner Notes</h2>
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>Notes</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let note of notes">
+            <td style="white-space: pre-wrap;">{{note.comment}}</td> <!-- retour à la ligne par br-->
+            <td style="width: 120px;">{{note.createdAt}}</td>
+            <td>
+              <button (click)="updateNoteById(note.id)" class="btn btn-info"
+                      style="margin-left: 3px;">Update
+              </button>
+            </td>
+            <td *ngIf="errorMessage"> {{errorMessage}}</td>
+            <td>
+              <button (click)="deleteNoteById(note.id)" class="btn btn-danger"
+                      style="margin-left: 3px;">Delete
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <button (click)="addNote()" class="btn btn-success">Add Note</button>
+      </div>
+
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        <h3>{{ errorMessage }}</h3>
+      </div>
+    </div>
+  </div>
+</div>

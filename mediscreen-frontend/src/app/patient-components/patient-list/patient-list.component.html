@@ -1,0 +1,33 @@
+<div class="search-container col-md-6">
+    <input type="search" placeholder="Search by last name..." [(ngModel)]="searchLastName">
+    <button (click)="searchPatientByLastName()" class="btn btn-outline-success mx-2" type="submit">Search</button>
+</div>
+<div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+</div>
+<h2>Patient List</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Last Name</th>
+            <th>First Name</th>
+            <th>Sex</th>
+            <th>Phone Number</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let p of patients">
+            <td>{{ p.lastName }}</td>
+            <td>{{ p.firstName }}</td>
+            <td>{{ p.sex }}</td>
+            <td>{{ p.phoneNumber }}</td>
+            <td>
+                <button (click)="updatePatient(p.id)" class="btn btn-info">Update</button>
+                <button (click)="deletePatient(p.id)" class="btn btn-danger" style="margin-left: 10px">Delete</button>
+                <button (click)="showPatientDetails(p.id)" class="btn btn-info" style="margin-left: 10px">Patient
+                    Details</button>
+            </td>
+        </tr>
+    </tbody>
+</table>

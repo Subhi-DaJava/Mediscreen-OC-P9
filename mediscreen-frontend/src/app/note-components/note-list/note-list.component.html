@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="search-container row mx-5">
+    <div class="col">
+      <div>
+        <input type="search" placeholder="Search by Last Name..." [(ngModel)]="searchByLastName">
+        <button (click)="searchByLastname()" class="btn btn-outline-success mx-2" type="submit">Search</button>
+      </div>
+      <div *ngIf="errorMessageLastName" class="alert alert-danger text-danger mt-2 error-message">
+        {{ errorMessageLastName }}
+      </div>
+    </div>
+    <div class="col">
+      <div>
+        <input type="search" placeholder="Search by Patient Id..." [(ngModel)]="searchByPatientId">
+        <button (click)="searchByPatId()" class="btn btn-outline-success mx-2" type="submit">Search</button>
+      </div>
+      <div *ngIf="errorMessagePatId" class="alert alert-danger text-danger mt-2 error-message">
+        {{ errorMessagePatId }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2>Notes</h2>
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>LastName</th>
+    <th>Doctor Notes</th>
+    <th>Update</th>
+    <th>Delete</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let note of notes">
+    <td>{{note.patLastName}}</td>
+    <td style="white-space: pre-wrap">{{note.comment}}</td>
+    <td>
+      <button (click)="updateNoteById(note.id)" class="btn btn-info" style="margin-left: 3px;">Update</button>
+    </td>
+    <td>
+      <button (click)="deleteNoteById(note.id)" class="btn btn-danger" style="margin-left: 3px;">Delete</button>
+    </td>
+  </tr>
+  </tbody>
+</table>

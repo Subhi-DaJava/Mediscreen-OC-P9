@@ -1,0 +1,23 @@
+<div class="col-md-6 offset-md-3">
+  <h3>Add New Note</h3>
+  <form (ngSubmit)="ngSubmit()">
+
+    <div class="form-group">
+      <label>Comment</label>
+      <textarea class="form-control" id="comment" [(ngModel)]="note.comment" name="comment" placeholder="Enter your note..." style="white-space: pre-wrap;"></textarea>
+    </div>
+
+    <h3>{{note.comment}}</h3>
+
+    <div class="form-group">
+      <label>Consultation Date</label>
+      <input type="date" class="form-control" id="createdAt" [(ngModel)]="note.createdAt" name="createdAt">
+    </div>
+    <div *ngIf="errorMessage" class="alert alert-danger text-danger mt-2 fs-5">
+      {{ errorMessage }}
+    </div>
+    <button type="submit" class="btn btn-success create-button">Save Note</button>
+    <button type="submit" class="btn btn-danger cancel-button mx-1">
+      <a [routerLink]="['/patient-details', patId]" class="text-decoration-none text-white">Cancel</a></button>
+  </form>
+</div>
