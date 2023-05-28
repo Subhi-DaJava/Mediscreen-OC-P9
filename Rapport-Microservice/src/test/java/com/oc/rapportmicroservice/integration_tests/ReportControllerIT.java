@@ -1,33 +1,22 @@
 package com.oc.rapportmicroservice.integration_tests;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.oc.rapportmicroservice.controller.ReportController;
 import com.oc.rapportmicroservice.model.Note;
 import com.oc.rapportmicroservice.model.Patient;
-import com.oc.rapportmicroservice.model.Report;
 import com.oc.rapportmicroservice.service.NoteService;
 import com.oc.rapportmicroservice.service.PatientService;
-import com.oc.rapportmicroservice.service.ReportService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDate;
 
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,19 +27,86 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ReportControllerIT {
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private ReportService reportService;
-
     @MockBean
     private PatientService patientService;
     @MockBean
     private NoteService noteService;
+    @Test
+    void testGetReportByPatIdShouldGenerateReportNoRiskWithAgeMoreThen30Years() throws Exception {
+        // Given
+        Long patId = 2L;
+//        Report report = new Report(patId, "Lucas Ferguson", "Age: 35, Gender: M, Risk level: Borderline");
+        Patient patient = new Patient(patId, "Doe", "John",
+                LocalDate.of(1983, 10, 18), "M", "31 Box Street", "222-556-4123");
+        Note[] notes = {
+                new Note(2L, "Doe", "Nice, Healthy", LocalDate.now()),
+                new Note(2L, "Doe", "Non smoker", LocalDate.now())
+        };
 
-    @Autowired
-    private ObjectMapper objectMapper;
+        when(patientService.getPatientByPatId(patId)).thenReturn(patient);
+        when(noteService.getNotesByPatId(patId)).thenReturn(notes);
+
+        // When
+        mockMvc.perform(post("/assess/id")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("patId", String.valueOf(patId)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.diabetesAssessment", is("Age: 39, Gender: M, Risk level: None")))
+                .andReturn();
+
+    }
+    @Test
+    void testGetReportByPatIdShouldGenerateReportNoRiskWithAgeLessThen30Years() throws Exception {
+        // Given
+        Long patId = 2L;
+//        Report report = new Report(patId, "Lucas Ferguson", "Age: 35, Gender: M, Risk level: Borderline");
+        Patient patient = new Patient(patId, "Doe", "John",
+                LocalDate.of(2003, 10, 18), "M", "31 Box Street", "222-556-4123");
+        Note[] notes = {
+                new Note(3L, "Doe", "Nice, Healthy", LocalDate.now()),
+                new Note(3L, "Doe", "Non smoker", LocalDate.now())
+        };
+
+        when(patientService.getPatientByPatId(patId)).thenReturn(patient);
+        when(noteService.getNotesByPatId(patId)).thenReturn(notes);
+
+        // When
+        mockMvc.perform(post("/assess/id")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("patId", String.valueOf(patId)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.diabetesAssessment", is("Age: 19, Gender: M, Risk level: None")))
+                .andReturn();
+
+    }
 
     @Test
-    void testGetReportByPatIdShouldGenerateReport() throws Exception {
+    void testGetReportByPatIdShouldGenerateReportRiskUnknownWithAgeLessThen30YearsWithOneTriggerWord() throws Exception {
+        // Given
+        Long patId = 2L;
+//        Report report = new Report(patId, "Lucas Ferguson", "Age: 35, Gender: M, Risk level: Borderline");
+        Patient patient = new Patient(patId, "Doe", "John",
+                LocalDate.of(2003, 10, 18), "M", "31 Box Street", "222-556-4123");
+        Note[] notes = {
+                new Note(5L, "Doe", "Poids", LocalDate.now()),
+                new Note(5L, "Doe", "Non-smoker", LocalDate.now())
+        };
+
+        when(patientService.getPatientByPatId(patId)).thenReturn(patient);
+        when(noteService.getNotesByPatId(patId)).thenReturn(notes);
+
+        // When
+        mockMvc.perform(post("/assess/id")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("patId", String.valueOf(patId)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.diabetesAssessment", is("Age: 19, Gender: M, Risk level: Unknown")))
+                .andReturn();
+
+    }
+
+    @Test
+    void testGetReportByPatIdShouldGenerateReportRiskBorderlineWithAgeMoreThen30Years() throws Exception {
         // Given
         Long patId = 2L;
 //        Report report = new Report(patId, "Lucas Ferguson", "Age: 35, Gender: M, Risk level: Borderline");
@@ -73,7 +129,30 @@ class ReportControllerIT {
                 .andReturn();
 
     }
+    @Test
+    void testGetReportByPatIdShouldGenerateReportRiskUnknownWithAgeLessThen30Years() throws Exception {
+        // Given
+        Long patId = 2L;
+//        Report report = new Report(patId, "Lucas Ferguson", "Age: 35, Gender: M, Risk level: Borderline");
+        Patient patient = new Patient(patId, "Doe", "John",
+                LocalDate.of(2003, 10, 18), "M", "31 Box Street", "222-556-4123");
+        Note[] notes = {
+                new Note(5L, "Doe", "Poids", LocalDate.now()),
+                new Note(5L, "Doe", "Fumeur", LocalDate.now())
+        };
 
+        when(patientService.getPatientByPatId(patId)).thenReturn(patient);
+        when(noteService.getNotesByPatId(patId)).thenReturn(notes);
+
+        // When
+        mockMvc.perform(post("/assess/id")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("patId", String.valueOf(patId)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.diabetesAssessment", is("Age: 19, Gender: M, Risk level: Unknown")))
+                .andReturn();
+
+    }
     @Test
     void testGetReportByPatIdShouldThrowError() throws Exception {
         // Given
@@ -107,7 +186,7 @@ class ReportControllerIT {
 
 
     @Test
-    void testGetReportByPatLastNameShouldGenerateReport() throws Exception {
+    void testGetReportByPatLastNameShouldGenerateReportRiskInDangerWithAgeLessThen30YearsAndFemale() throws Exception {
         // Given
         String lastName = "Doe";
         //Report report = new Report(3L, "John Doe", "Age: 20, Gender: F, Risk level: In Danger");
@@ -127,6 +206,155 @@ class ReportControllerIT {
                         .param("familyName",lastName))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.diabetesAssessment", is("Age: 19, Gender: F, Risk level: In Danger")))
+                .andReturn();
+
+    }
+    @Test
+    void testGetReportByPatLastNameShouldGenerateReportRiskInDangerWithAgeLessThen30YearsAndMale() throws Exception {
+        // Given
+        String lastName = "Doe";
+        //Report report = new Report(3L, "John Doe", "Age: 20, Gender: F, Risk level: In Danger");
+        Patient patient = new Patient(3L, "Doe", "John",
+                LocalDate.of(2003, 10, 18), "M", "31 Box Street", "222-556-4123");
+        Note[] notes = {
+                new Note(3L, "Doe", "Poids, Taille", LocalDate.now()),
+                new Note(3L, "Doe", "Fumeur, Réaction", LocalDate.now())
+        };
+
+        when(patientService.getPatientByPatLastName(lastName)).thenReturn(patient);
+        when(noteService.getNotesByPatLastName(lastName)).thenReturn(notes);
+
+        // When
+        mockMvc.perform(post("/assess/familyName")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("familyName",lastName))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.diabetesAssessment", is("Age: 19, Gender: M, Risk level: In Danger")))
+                .andReturn();
+
+    }
+
+    @Test
+    void testGetReportByPatLastNameShouldGenerateReportRiskInDangerWithAgeMoreThen30Years() throws Exception {
+        // Given
+        String lastName = "Doe";
+        //Report report = new Report(3L, "John Doe", "Age: 20, Gender: F, Risk level: In Danger");
+        Patient patient = new Patient(3L, "Doe", "John",
+                LocalDate.of(1982, 10, 18), "M", "31 Box Street", "222-556-4123");
+        Note[] notes = {
+                new Note(3L, "Doe", "Poids, Taille, Hémoglobine A1C", LocalDate.now()),
+                new Note(3L, "Doe", "Fumeur, Réaction, Anormal", LocalDate.now())
+        };
+
+        when(patientService.getPatientByPatLastName(lastName)).thenReturn(patient);
+        when(noteService.getNotesByPatLastName(lastName)).thenReturn(notes);
+
+        // When
+        mockMvc.perform(post("/assess/familyName")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("familyName",lastName))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.diabetesAssessment", is("Age: 40, Gender: M, Risk level: In Danger")))
+                .andReturn();
+
+    }
+
+    @Test
+    void testGetReportByPatLastNameShouldGenerateReportEarlyOnSetWithAgeLessThen30YearsAndMale() throws Exception {
+        // Given
+        String lastName = "Doe";
+        //Report report = new Report(3L, "John Doe", "Age: 20, Gender: F, Risk level: In Danger");
+        Patient patient = new Patient(3L, "Doe", "John",
+                LocalDate.of(2003, 10, 18), "M", "31 Box Street", "222-556-4123");
+        Note[] notes = {
+                new Note(3L, "Doe", "Poids, Taille, Hémoglobine A1C", LocalDate.now()),
+                new Note(3L, "Doe", "Fumeur, Réaction", LocalDate.now())
+        };
+
+        when(patientService.getPatientByPatLastName(lastName)).thenReturn(patient);
+        when(noteService.getNotesByPatLastName(lastName)).thenReturn(notes);
+
+        // When
+        mockMvc.perform(post("/assess/familyName")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("familyName",lastName))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.diabetesAssessment", is("Age: 19, Gender: M, Risk level: Early onset")))
+                .andReturn();
+
+    }
+
+    @Test
+    void testGetReportByPatLastNameShouldGenerateReportEarlyOnSetWithAgeLessThen30YearsAndFemale() throws Exception {
+        // Given
+        String lastName = "Doe";
+        //Report report = new Report(3L, "John Doe", "Age: 20, Gender: F, Risk level: In Danger");
+        Patient patient = new Patient(3L, "Doe", "John",
+                LocalDate.of(2003, 10, 18), "F", "31 Box Street", "222-556-4123");
+        Note[] notes = {
+                new Note(3L, "Doe", "Poids, Taille, Hémoglobine A1C", LocalDate.now()),
+                new Note(3L, "Doe", "Fumeur, Réaction, Anormal, Cholestérol", LocalDate.now())
+        };
+
+        when(patientService.getPatientByPatLastName(lastName)).thenReturn(patient);
+        when(noteService.getNotesByPatLastName(lastName)).thenReturn(notes);
+
+        // When
+        mockMvc.perform(post("/assess/familyName")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("familyName",lastName))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.diabetesAssessment", is("Age: 19, Gender: F, Risk level: Early onset")))
+                .andReturn();
+
+    }
+
+    @Test
+    void testGetReportByPatLastNameShouldGenerateReportEarlyOnSetWithAgeMoreThen30Years() throws Exception {
+        // Given
+        String lastName = "Doe";
+        //Report report = new Report(3L, "John Doe", "Age: 20, Gender: F, Risk level: In Danger");
+        Patient patient = new Patient(3L, "Doe", "John",
+                LocalDate.of(1982, 10, 18), "F", "31 Box Street", "222-556-4123");
+        Note[] notes = {
+                new Note(3L, "Doe", "Poids, Taille, Hémoglobine A1C", LocalDate.now()),
+                new Note(3L, "Doe", "Fumeur, Réaction, Anormal, Cholestérol, Vertige, Anticorps", LocalDate.now())
+        };
+
+        when(patientService.getPatientByPatLastName(lastName)).thenReturn(patient);
+        when(noteService.getNotesByPatLastName(lastName)).thenReturn(notes);
+
+        // When
+        mockMvc.perform(post("/assess/familyName")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("familyName",lastName))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.diabetesAssessment", is("Age: 40, Gender: F, Risk level: Early onset")))
+                .andReturn();
+
+    }
+
+    @Test
+    void testGetReportByPatLastNameShouldGenerateReportEarlyOnSetWithAgeMoreThen30YearsWith9TriggerWords() throws Exception {
+        // Given
+        String lastName = "Doe";
+        //Report report = new Report(3L, "John Doe", "Age: 20, Gender: F, Risk level: In Danger");
+        Patient patient = new Patient(3L, "Doe", "John",
+                LocalDate.of(1982, 10, 18), "F", "31 Box Street", "222-556-4123");
+        Note[] notes = {
+                new Note(3L, "Doe", "Poids, Taille, Hémoglobine A1C", LocalDate.now()),
+                new Note(3L, "Doe", " Fumeur, Réaction, Anormal, Cholestérol, Vertige, Anticorps", LocalDate.now())
+        };
+
+        when(patientService.getPatientByPatLastName(lastName)).thenReturn(patient);
+        when(noteService.getNotesByPatLastName(lastName)).thenReturn(notes);
+
+        // When
+        mockMvc.perform(post("/assess/familyName")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("familyName",lastName))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.diabetesAssessment", is("Age: 40, Gender: F, Risk level: Early onset")))
                 .andReturn();
 
     }
