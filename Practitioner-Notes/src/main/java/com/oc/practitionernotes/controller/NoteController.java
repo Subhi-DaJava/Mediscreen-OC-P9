@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/notes")
@@ -23,6 +24,11 @@ public class NoteController {
         this.noteService = noteService;
     }
 
+    /**
+     * Retrieves all the notes.
+     *
+     * @return A list containing all the notes.
+     */
     @GetMapping
     public List<Note> getAllNotes() {
         logger.debug("getAllNotes starts here from NoteController");
@@ -30,10 +36,11 @@ public class NoteController {
         logger.info("All Notes have been successfully retrieved, from NoteController");
         return notes;
     }
+
     @GetMapping("/by-patId/{patId}")
     public ResponseEntity<List<Note>> getAllNotesOfPatientPatId(@PathVariable Long patId) {
         logger.debug("getAllNotesOfPatientByPatId starts here, from NoteController");
-        List<Note> notes =  noteService.getPatientAllNotesByPatientId(patId);
+        List<Note> notes = noteService.getPatientAllNotesByPatientId(patId);
         logger.info("All Notes of this patient with patId:{%d} have been retrieved from DB!".formatted(patId));
         return ResponseEntity.ok(notes);
     }
@@ -41,7 +48,7 @@ public class NoteController {
     @GetMapping("/by-lastName/{lastName}")
     public ResponseEntity<List<Note>> getAllNotesOfPatientPatLastName(@PathVariable String lastName) {
         logger.debug("getAllNotesOfPatientByPatLastName starts here, from NoteController");
-        List<Note> notes =  noteService.getPatientAllNotesByPatientLastName(lastName);
+        List<Note> notes = noteService.getPatientAllNotesByPatientLastName(lastName);
         logger.info("All Notes of this patient with patLastName:{%s} have been retrieved from DB!".formatted(lastName));
         return ResponseEntity.ok(notes);
     }
@@ -61,6 +68,7 @@ public class NoteController {
         logger.info("Note with id:{} has been successfully updated, from NoteController", id);
         return ResponseEntity.ok(noteUpdated);
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteById(@PathVariable String id) {
         logger.debug("deleteById starts here, from NoteController");
