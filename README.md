@@ -41,10 +41,11 @@ The application consists of several microservices that interact with each other 
 - Ensure java 17, Docker, Node.js and mpn are installed as they are required for executing the microservices individually and testing.
 
 ## Execution/Deployment Appilication
-##### - Start the Docker services using Docker Compose: `docker-compose up -d` 
-        
+##### - Navigate to the root directory where the `docker-compose.yml` file is located.
+##### - Start the Docker services using Docker Compose command: `docker-compose up -d` 
 ##### - Then, access the application by navigating to `localhost:<angular-port>`
 ##### - To interact with the application, you can start by adding a new patient and then adding a new note for the patient
+
 ## Run Mediscreen-Frontend Microservice separately
 * Navigate to the root directory of `mediscreen-frontend`
 * Execute the `npm install` command to install the required Node packages
