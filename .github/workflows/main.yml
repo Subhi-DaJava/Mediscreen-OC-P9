@@ -1,117 +1,12 @@
-version: "3.8"
-services:
-  mysqldb:
-    container_name: mediscreen_patient
-    image: mysql:8.0.32
-    restart: unless-stopped
-    env_file:
-      - ./.env
-    environment:
-      MYSQL_ROOT_PASSWORD: $MYSQLDB_ROOT_PASSWORD
-      MYSQL_DATABASE: $MYSQLDB_DATABASE
-    ports:
-     - $MYSQLDB_DOCKER_PORT:$MYSQLDB_LOCAL_PORT
-    networks:
-        - mediscreen-network
-    # map volume folders  
-    volumes:
-     - ./mediscreen_patient_db:/var/lib/mysql
+FROM openjdk:17-alpine
+WORKDIR /patient-microservice
 
-  patient-microservice:
-    depends_on:
-      - mysqldb
-    container_name: patient-microservice
-    image: patient-microservice
-    build: ./patient-microservice
-    env_file:
-      - ./.env
-    restart: on-failure
-    ports:
-      - $SPRING_DOCKER_PORT:$SPRING_LOCAL_PORT
-    networks:
-        - mediscreen-network
-    environment:
-      SPRING_APPLICATION_JSON: '{
-        "spring.datasource.url"  : "jdbc:mysql://mysqldb:$MYSQLDB_LOCAL_PORT/$MYSQLDB_DATABASE?createDatabaseIfNotExist=true&serverTimezone=UTC",
-        "spring.datasource.username" : "$MYSQLDB_USER",
-        "spring.datasource.password" : "$MYSQLDB_ROOT_PASSWORD",
-        "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.MySQL8Dialect",
-        "spring.jpa.hibernate.ddl-auto" : "update",
-        "spring.jpa.show-sql" : "true",
-        "server.port" : "$SPRING_LOCAL_PORT"
-      }'
+COPY build.gradle gradlew settings.gradle ./
+COPY gradle/ gradle/
+RUN ./gradlew clean build
 
-  angular-app:
-    container_name: mediscreen_angular
-    image: mediscreen_angular
-    build: ./mediscreen-frontend
-    restart: on-failure
-    env_file:
-      - ./.env
-    ports:
-      - $ANGULAR_DOCKER_PORT:$ANGULAR_LOCAL_PORT
-    networks:
-        - mediscreen-network
-  
-  note-microservice:
-    container_name: practitioner-notes
-    image: practitioner-notes
-    build: ./Practitioner-Notes
-    restart: on-failure
-    env_file:
-      - ./.env
-    ports:
-      - $SPRING_DOCKER_NOTE_PORT:$SPRING_LOCAL_NOTE_PORT
-    links:
-      - mymongodb
-#    environment:
-#      WAIT_HOSTS: mymongodb:27018
-    networks:
-        - mediscreen-network
-
-  mymongodb:
-    image: mongo:latest
-    container_name: mymongodb
-    restart: unless-stopped
-    env_file:
-      - ./.env
-    ports:
-      - "27018:27017"
-    environment:
-      - SPRING_DATA_MONGODB_HOST = $SPRING_DATA_MONGODB_HOST
-      - SPRING_DATA_MONGODB_PORT = $SPRING_DATA_MONGODB_PORT
-      - SPRING_DATA_MONGODB_DATABASE = $SPRING_DATA_MONGODB_DATABASE
-      - SPRING_DATA_MONGODB_SERVER_PORT = $SPRING_DATA_MONGODB_SERVER_PORT
-    expose:
-      - 27018
-    volumes:
-      - ./mediscreen_note_db:/data/db
-    networks:
-        - mediscreen-network
-
-  report-microservice:
-    container_name: rapport-microservice
-    image: rapport-microservice
-    build: ./Rapport-Microservice
-    restart: on-failure
-    env_file:
-      - ./.env
-    ports:
-      - "8080:8080"
-    environment:
-      - PATIENT_MICROSERVICE_URL = $PATIENT_MICROSERVICE_URL
-      - NOTE_MICROSERVICE_URL = $NOTE_MICROSERVICE_URL
-    depends_on:
-      - patient-microservice
-      - note-microservice
-    networks:
-      - mediscreen-network
-
-networks:
-    mediscreen-network:
-        name: mediscreen-network
-        driver: bridge
-volumes:
-  mediscreen_patient_db:
-  mediscreen_note_db:
-  
+COPY src/ src/
+RUN ./gradlew bootJar
+#RUN MYSQL
+EXPOSE 8081
+CMD ["java", "-jar", "build/libs/patient-microservice.jar"]
