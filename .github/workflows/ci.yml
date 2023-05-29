@@ -13,6 +13,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Install Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+
       - name: Log in to Docker registry
         uses: docker/login-action@v1
         with:
@@ -21,9 +26,6 @@ jobs:
           password: ${{ secrets.REGISTRY_PASSWORD }} # Remplacez par votre mot de passe de registre
 
       - name: Build and push Docker images
-        env:
-          DOCKER_BUILDKIT: '1'
-          COMPOSE_DOCKER_CLI_BUILD: '1'
         run: |
           docker-compose build
 
@@ -31,15 +33,6 @@ jobs:
           docker-compose push
 
       - name: Deploy with Docker Compose
-        env:
-          DOCKER_BUILDKIT: '1'
-          COMPOSE_DOCKER_CLI_BUILD: '1'
         run: |
-          # Install Docker Compose if not already installed
-          if ! command -v docker-compose &> /dev/null; then
-            sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-            sudo chmod +x /usr/local/bin/docker-compose
-          fi
-
           # Deploy the stack using Docker Compose
           docker-compose up -d
