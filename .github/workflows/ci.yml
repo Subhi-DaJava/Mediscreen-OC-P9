@@ -21,7 +21,7 @@ jobs:
       - name: Log in to Docker registry
         uses: docker/login-action@v1
         with:
-          registry: <registry> # Remplacez par votre URL de registre
+          registry: docker.io # Remplacez par votre URL de registre
           username: ${{ secrets.REGISTRY_USERNAME }} # Remplacez par votre nom d'utilisateur de registre
           password: ${{ secrets.REGISTRY_PASSWORD }} # Remplacez par votre mot de passe de registre
 
