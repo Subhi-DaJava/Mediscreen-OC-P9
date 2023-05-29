@@ -1,0 +1,46 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Compose
+        uses: docker/compose-cli@v1
+        with:
+          version: '1.29.2'
+
+      - name: Build and push Docker images
+        env:
+          DOCKER_BUILDKIT: '1'
+          COMPOSE_DOCKER_CLI_BUILD: '1'
+        run: |
+          docker-compose build
+
+          # Push the built images to a container registry
+          # Replace <registry> with your actual registry URL and credentials
+          docker-compose push
+
+      - name: Deploy with Docker Compose
+        env:
+          DOCKER_BUILDKIT: '1'
+          COMPOSE_DOCKER_CLI_BUILD: '1'
+        run: |
+          # Install Docker Compose if not already installed
+          if ! command -v docker-compose &> /dev/null; then
+            DOCKER_COMPOSE_VERSION=$(curl --silent https://api.github.com/repos/docker/compose-cli/releases/latest | grep -Po '"tag_name": "\K.*?(?=")' | cut -c 2-)
+            DOCKER_COMPOSE_URL="https://github.com/docker/compose-cli/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-linux"
+            sudo curl -L "${DOCKER_COMPOSE_URL}" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+          fi
+
+          # Deploy the stack using Docker Compose
+          docker-compose up -d
