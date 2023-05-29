@@ -64,6 +64,8 @@ services:
       - $SPRING_DOCKER_NOTE_PORT:$SPRING_LOCAL_NOTE_PORT
     links:
       - mymongodb
+#    environment:
+#      WAIT_HOSTS: mymongodb:27018
     networks:
         - mediscreen-network
 
@@ -74,12 +76,14 @@ services:
     env_file:
       - ./.env
     ports:
-      - "27017:27017"
+      - "27018:27017"
     environment:
       - SPRING_DATA_MONGODB_HOST = $SPRING_DATA_MONGODB_HOST
       - SPRING_DATA_MONGODB_PORT = $SPRING_DATA_MONGODB_PORT
       - SPRING_DATA_MONGODB_DATABASE = $SPRING_DATA_MONGODB_DATABASE
       - SPRING_DATA_MONGODB_SERVER_PORT = $SPRING_DATA_MONGODB_SERVER_PORT
+    expose:
+      - 27018
     volumes:
       - ./mediscreen_note_db:/data/db
     networks:
@@ -108,5 +112,6 @@ networks:
         name: mediscreen-network
         driver: bridge
 volumes:
-  mediscreen:
+  mediscreen_patient_db:
+  mediscreen_note_db:
   
