@@ -79,27 +79,32 @@ PATIENT_DATABASE=${database_name};USER_PASSWORD=${password};server_port=${server
   ![mongodb_newConnection_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/f0225d08-c472-4911-9bf8-f6e2ed93eaae)
 
 ## JaCoCo Test Reports
-1. Patient-Microservice
+#### 1. Patient-Microservice
 ![patient-test-report](/test-reports/patient-test-jacoco-report.png)
-2. Practitioner-Notes
+#### 2. Practitioner-Notes
 ![note-test-report](/test-reports/note-test-jacoco-report.png)
-3. Rapport-Microservice
+#### 3. Rapport-Microservice
 ![rapport-test-report](/test-reports/rapport-test-jacoco-report.png)
 
 ## Some Application Feature Screenshots 
-1. Home Page 
+#### 1. Home Page 
 ![home_page_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/244907fe-75fa-47c3-9a2c-f2bc31459d41)
-2. Patient-Details
+#### 2. Patient-Details
 ![patient_details_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/470926dc-e30f-465e-a54f-4cd9df39a970)
-3. Add New Patient
+#### 3. Add New Patient
 ![add_patient_form_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/b027f176-125c-4623-a6b5-477f78228a4b)
-4. Update Patient
+#### 4. Negative Cases (fields mandatory)
+#### ![mandatory_cases_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/0ef11e1c-5121-485a-94a7-e25d42401e90)
+#### 5. Negative Cases(format and others)
+#### ![format_caces_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/af71e1eb-4a70-4369-8378-98b5a882f847)
+#### 6. Update Patient
 ![patient_update_form_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/b81dd565-3049-43c5-a131-9a61a68eabd2)
-5. Update Patient Note
+#### 7. Negative Cases(format and others)
+#### ![format_caces_update_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/11138216-23ff-401b-9f48-b0d347fbb88d)
+#### 8. Update Patient Note
 ![update_note_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/908da6f0-26df-4af2-9a3b-b28d3f532ccf)
-6. Patient Report
+#### 9. Patient Report
 ![report_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/4614548a-1173-4310-88d6-ebabb49640e9)
-
 
 [^1]:replace ${patient_server_port} with 8081 (or else), and ${note_server_port} with 8082 (or else)
 [^2]: replace ${USERNAME} with the name of User to connect to MySQL server
