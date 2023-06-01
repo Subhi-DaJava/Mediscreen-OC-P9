@@ -50,7 +50,7 @@ export class UpdatePatientComponent implements OnInit {
         error: error => {
           console.log(error);
           this.errorMessage = error.error.message;
-          this.errorMessages = error.error.errors ? error.error.errors : 'An error occurred while validating the form';
+          this.errorMessages = error.error.errors;
         }
       });
   }

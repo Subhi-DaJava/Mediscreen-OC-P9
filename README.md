@@ -38,8 +38,8 @@ The application consists of several microservices that interact with each other 
 #### Follow the steps below to install and run the application locally:
 * Clone the repository:
   -  git clone [https://github.com/your_username/your_repo.git](https://github.com/Subhi-DaJava/Mediscreen-OC-P9.git)
-+ Configure `.env`
-  - set the host ports, server ports(Angular, Microservices, MySQL, MongoDB), docker mapping ports, username, userpassword, database name for MySQL, MongoDB and the Endpoints(URLs) for Microservices APIs
++ Configure `.env`[^3]
+  - set the host ports, server ports(Angular, Microservices, MySQL, MongoDB), docker mapping ports, username, user-password, database name for MySQL, MongoDB and the Endpoints(URLs) for Microservices APIs
 - Ensure java 17, Docker, Node.js and mpn are installed as they are required for executing the microservices individually and testing.
 
 ## Execution/Deployment Appilication
@@ -96,15 +96,16 @@ PATIENT_DATABASE=${database_name};USER_PASSWORD=${password};server_port=${server
 #### 4. Negative Cases (fields mandatory)
 #### ![mandatory_cases_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/0ef11e1c-5121-485a-94a7-e25d42401e90)
 #### 5. Negative Cases(format and others)
-#### ![format_caces_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/af71e1eb-4a70-4369-8378-98b5a882f847)
+#### ![format_cases_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/af71e1eb-4a70-4369-8378-98b5a882f847)
 #### 6. Update Patient
 ![patient_update_form_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/b81dd565-3049-43c5-a131-9a61a68eabd2)
 #### 7. Negative Cases(format and others)
-#### ![format_caces_update_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/11138216-23ff-401b-9f48-b0d347fbb88d)
+#### ![format_cases_update_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/11138216-23ff-401b-9f48-b0d347fbb88d)
 #### 8. Update Patient Note
 ![update_note_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/908da6f0-26df-4af2-9a3b-b28d3f532ccf)
 #### 9. Patient Report
 ![report_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/4614548a-1173-4310-88d6-ebabb49640e9)
 
-[^1]:replace ${patient_server_port} with 8081 (or else), and ${note_server_port} with 8082 (or else)
-[^2]: replace ${USERNAME} with the name of User to connect to MySQL server
++ [^1]:replace ${patient_server_port} with 8081 (or else), and ${note_server_port} with 8082 (or else)
+- [^2]: replace ${USERNAME} with the name of User to connect to MySQL server
++ [^3]: The `.env` file is a crucial component of your application's configuration, providing a centralized storage for sensitive configuration information.
