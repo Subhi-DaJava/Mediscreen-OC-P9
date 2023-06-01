@@ -23,7 +23,6 @@ export class ReportComponent implements OnInit {
     this.generateReportByPatId(this.patId);
   }
 
-
   private generateReportByPatId(patId: number) {
     return this.reportService.generateReportByPatId(patId).subscribe({
       next: generatedReport => {

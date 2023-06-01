@@ -10,11 +10,21 @@
   </div>
 </div>
 
+<div *ngIf="patientNotFound">
+  <div class="alert alert-danger text-danger mt-2 fs-5">
+    {{patientNotFound}}
+    <p>Patient not found in Database!</p>
+  </div>
+</div>
+
 <div *ngIf="errorMessage" class="alert alert-danger text-danger mt-2 fs-5">
   {{errorMessage}}
   <p>Note not found in Database for generating the report!</p>
 </div>
-<div class="text text-center fs-2 m-2">
+
+
+
+<div class="text text-center fs-2 m-2" *ngIf="patId">
   <button class="btn btn-primary"><a [routerLink]="['/patient-details', patId]"
                                      class="text-decoration-none text-white fs-4">Go Back To Patient Details</a>
   </button>

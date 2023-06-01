@@ -21,7 +21,10 @@
           <button class="btn btn-primary mx-2"><a routerLink="/patients" class="text text-white text-decoration-none">Patient List</a></button>
         </div>
       </div>
-
+      <div *ngIf="errorMessage" class="alert alert-danger mt-2 text-center">
+        <p>{{ errorMessage }}</p>
+        <button class="btn btn-primary"><a routerLink="/patients" class="text text-white text-decoration-none">Go Back To Patient List</a></button>
+      </div>
       <div *ngIf="notes">
         <h2>Practitioner Notes</h2>
         <table class="table table-striped">
@@ -54,10 +57,6 @@
 
       <div>
         <button (click)="addNote()" class="btn btn-success">Add Note</button>
-      </div>
-
-      <div *ngIf="errorMessage" class="alert alert-danger">
-        <h3>{{ errorMessage }}</h3>
       </div>
     </div>
   </div>

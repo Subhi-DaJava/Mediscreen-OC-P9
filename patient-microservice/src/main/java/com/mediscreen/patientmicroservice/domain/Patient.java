@@ -33,6 +33,7 @@ public class Patient {
     @Column(length = 1)
     @NotBlank(message = "Gender is mandatory")
     @Size(max = 1, min = 1)
+    @Pattern(regexp = "[MFN]", message = "Gender must be M, F, or N")
     private String sex;
 
     @Column(length = 120)

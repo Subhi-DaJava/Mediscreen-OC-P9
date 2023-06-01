@@ -104,7 +104,7 @@ export class PatientDetailsComponent implements OnInit {
           this.router.navigate(['/add-node-to-patient', this.id]).then();
         }
       },
-    error: err => {
+      error: err => {
         console.log(err);
         this.errorMessage = err.error.message;
       }
@@ -116,7 +116,23 @@ export class PatientDetailsComponent implements OnInit {
   }
 
   generateReportByPatName(name: string) {
-    this.router.navigate(['report-by-name', name]).then()
-}
+    this.getPatientByPatName(name);
+  }
+
+  private getPatientByPatName(name: string) {
+    this.patientService.getPatientByLastName(name).subscribe({
+      next: patientByPatLastName => {
+        if (!patientByPatLastName) {
+          this.router.navigate(['/patients']).then();
+        } else {
+          this.router.navigate(['report-by-name', name]).then()
+        }
+      },
+      error: err => {
+        console.log(err);
+        this.errorMessage = err.error.message;
+      }
+    })
+  }
 
 }

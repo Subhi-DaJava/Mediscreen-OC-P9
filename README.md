@@ -22,9 +22,11 @@ The application consists of several microservices that interact with each other 
 * Spring Boot (version 2.7.10)
 * Gradle 7.6.1
 * H2 (Version 2.1.214)
+* Logger-slf4j (version 1.7.36)
 * Swagger-OpenApi(version 1.7.0)
 * Docker (version 23.0.5)
 * Docker Compose (version v2.17.3)
+* Compose file (version 3.8)
 * MySQL (Version 8.0.32)
 * MongoDB (version v6.0.3)
 * Angular CLI (version 15.2.7)
@@ -53,7 +55,7 @@ The application consists of several microservices that interact with each other 
 * Access the application by navigating to `localhost:4200`(by default).
 
 ## Architecture 
-![artchitecture_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/61fc75f4-ff6c-4bd6-b5b2-713516e48329)
+![architecture_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/61fc75f4-ff6c-4bd6-b5b2-713516e48329)
 
 
 ## Running Tests 
@@ -94,7 +96,7 @@ PATIENT_DATABASE=${database_name};USER_PASSWORD=${password};server_port=${server
 4. Update Patient
 ![patient_update_form_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/b81dd565-3049-43c5-a131-9a61a68eabd2)
 5. Update Patient Note
-![updtae_note_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/908da6f0-26df-4af2-9a3b-b28d3f532ccf)
+![update_note_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/908da6f0-26df-4af2-9a3b-b28d3f532ccf)
 6. Patient Report
 ![report_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/4614548a-1173-4310-88d6-ebabb49640e9)
 

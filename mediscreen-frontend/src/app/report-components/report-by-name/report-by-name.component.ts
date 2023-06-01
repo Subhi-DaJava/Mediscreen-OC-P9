@@ -14,6 +14,7 @@ export class ReportByNameComponent implements OnInit {
   patName!: string;
   patId!: number;
   errorMessage!: string;
+  patientNotFound!: string;
 
   constructor(
     private reportService: ReportService,
@@ -24,11 +25,12 @@ export class ReportByNameComponent implements OnInit {
 
   ngOnInit(): void {
     this.patName = this.route.snapshot.params['patName'];
-    this.generateReportByPatName(this.patName);
     this.getPatientByPatLastName(this.patName);
+    this.generateReportByPatName(this.patName);
   }
 
   private generateReportByPatName(patName: string) {
+
     return this.reportService.generateReportByPatName(patName).subscribe({
       next: generatedReport => {
         this.report = generatedReport;
@@ -44,6 +46,10 @@ export class ReportByNameComponent implements OnInit {
   private getPatientByPatLastName(lastName: string) {
     this.patientService.getPatientByLastName(lastName).subscribe({
       next: patientGetByPatLastName => {
+        if (!patientGetByPatLastName) {
+          this.patientNotFound = "No patient with this name!"
+          console.log(this.patientNotFound);
+        }
         this.patId = patientGetByPatLastName.id;
         console.log(patientGetByPatLastName);
       }, error: err => {
