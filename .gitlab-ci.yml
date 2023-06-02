@@ -1,0 +1,54 @@
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_DRIVER: overlay2
+
+services:
+  - docker:23.0.3
+
+mediscreen:
+  stage: build
+  image: docker:23.0.3
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+  script:
+    - docker build -t mediscreen_patient .
+    - docker build -t patient-microservice ./patient-microservice
+    - docker build -t mediscreen_angular ./mediscreen-frontend
+    - docker build -t practitioner-notes ./Practitioner-Notes
+    - docker build -t rapport-microservice ./Rapport-Microservice
+
+test:
+  stage: test
+  image: docker:20.10.8
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+  script:
+    - docker run -d --name mysqldb -p $MYSQLDB_DOCKER_PORT:$MYSQLDB_LOCAL_PORT --env-file .env mysql:8.0.32
+    - docker run -d --name mymongodb -p 27018:27017 --env-file .env mongo:latest
+    - docker run -d --name patient-microservice -p $SPRING_DOCKER_PORT:$SPRING_LOCAL_PORT --env-file .env patient-microservice
+    - docker run -d --name mediscreen_angular -p $ANGULAR_DOCKER_PORT:$ANGULAR_LOCAL_PORT --env-file .env mediscreen_angular
+    - docker run -d --name practitioner-notes -p $SPRING_DOCKER_NOTE_PORT:$SPRING_LOCAL_NOTE_PORT --env-file .env practitioner-notes
+    - docker run -d --name rapport-microservice -p 8080:8080 --env-file .env rapport-microservice
+    - echo "Running tests..."
+
+deploy:
+  stage: deploy
+  image: docker:23.0.3
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+  script:
+    - echo "Deploying..."
+    # Add deployment commands here
+
+networks:
+  mediscreen-network:
+    name: mediscreen-network
+    driver: bridge
