@@ -1,4 +1,5 @@
 # Mediscreen-P9
+#### [GITLAB-CI/CD-PIPELINE](https://gitlab.com/Subhi-DaJava/Mediscreen-OC-P9/-/pipelines/888195287)
 
 Mediscreen is an application that focuses on preventive care. It aims to help doctors identify patients at risk of developing type 2 diabetes by analyzing their demographic data.
 
