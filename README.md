@@ -106,6 +106,6 @@ PATIENT_DATABASE=${database_name};USER_PASSWORD=${password};server_port=${server
 #### 9. Patient Report
 ![report_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/4614548a-1173-4310-88d6-ebabb49640e9)
 
-+ [^1]:replace ${patient_server_port} with 8081 (or else), and ${note_server_port} with 8082 (or else)
-- [^2]: replace ${USERNAME} with the name of User to connect to MySQL server
-+ [^3]: The `.env` file is a crucial component of your application's configuration, providing a centralized storage for sensitive configuration information.
+[^1]:replace ${patient_server_port} with 8081 (or else), and ${note_server_port} with 8082 (or else)
+[^2]: replace ${USERNAME} with the name of User to connect to MySQL server
+[^3]: The `.env` file is a crucial component of your application's configuration, providing a centralized storage for sensitive configuration information.
