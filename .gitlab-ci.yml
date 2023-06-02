@@ -22,7 +22,8 @@ mediscreen:
     - docker build -t mediscreen_angular ./mediscreen-frontend
     - docker build -t practitioner-notes ./Practitioner-Notes
     - docker build -t rapport-microservice ./Rapport-Microservice
-
+  networks:
+    - mediscreen-network
 test:
   stage: test
   image: docker:20.10.8
@@ -37,7 +38,8 @@ test:
     - docker run -d --name practitioner-notes -p $SPRING_DOCKER_NOTE_PORT:$SPRING_LOCAL_NOTE_PORT --env-file .env practitioner-notes
     - docker run -d --name rapport-microservice -p 8080:8080 --env-file .env rapport-microservice
     - echo "Running tests..."
-
+  networks:
+    - mediscreen-network
 deploy:
   stage: deploy
   image: docker:23.0.3
