@@ -105,6 +105,13 @@ PATIENT_DATABASE=${database_name};USER_PASSWORD=${password};server_port=${server
 ![update_note_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/908da6f0-26df-4af2-9a3b-b28d3f532ccf)
 #### 9. Patient Report
 ![report_image](https://github.com/Subhi-DaJava/Mediscreen-OC-P9/assets/90509456/4614548a-1173-4310-88d6-ebabb49640e9)
+#### Bonus 
+##### create/build docker image and run Patient-microservice with MySQL database separately 
+  Steps :
+1. docker network create patient_micro_0306
+2. docker run --name mysqldb --network patient_micro_0306 -p 3307:3306 --env="MYSQL_ROOT_PASSWORD=rootPassword" --env="MYSQL_PASSWORD=rootPassword" --env="MYSQL_DATABASE=patient_0306"
+-e PATIENT_DATABASE=patient_0306 mysql:latest
+3. docker run --network patient_micro_0306 --name patient_container_0306 --env="server_port=8081" --env="USERNAME=root" -e MYSQL_HOST=mysqldb --env="USER_PASSWORD=rootPassword" --env="MYSQL_USER=root" -e PATIENT_DATABASE=patient_0306 -p 8081:8081 patient_micro_0306
 
 [^1]:replace ${patient_server_port} with 8081 (or else), and ${note_server_port} with 8082 (or else)
 [^2]: replace ${USERNAME} with the name of User to connect to MySQL server
